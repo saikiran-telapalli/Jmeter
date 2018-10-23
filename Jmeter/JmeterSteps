@@ -1,0 +1,330 @@
+JMeter Steps:
+
+A.Start Jmter:
+
+1.Install java 
+2.Download Jmeter
+3.Unzip and keep Jmeter folder any location
+4.Start Jmeter 
+Windows: Jmeter->bin->meter.bat (double click)
+Mac: Open terminal->Jmeter/bin. -> and run “sh.Jmter.sh”
+
+*************************************************************************************************************
+
+B: First Jmeter Test:
+
+1.Left Pan: 
+1.Test Plan : Is like a container which contains all test elements that we need to test , Whether its a request/reports all will come under it
+2.WorkBench : Is place where you can keep ur elements for a temp basis
+
+Note: Make sure if u want ur elements to be saved then it should be in test plan
+
+1.Give the Name of test plan
+2.Right click on test plan -> Add->Threads -> Thread Group. : Name it as Users
+1.1. Users: Is the users that will be used to create/run this test —> Rename to Users
+
+3.Right click on Thread Group -> Add->  Sampler
+
+3.1 : HTTP Request: Web App we are running : Name it as MyHomePage
+Server/IP Address : Paste the URL of the web app 
+->No need to give https:// and also forward slash after URL
+Path: Give the path in that box
+Port: Give port number if there
+
+To start the test Either 1.Right click on users -> Start
+2. Menu Bar ->Run
+3. Run Button
+
+Note: To know of the result we need Listners
+
+Listners:
+
+3.Right click on Thread Group -> Add->  Listeners
+View Results in Table:  
+Sample Time-> Time it took to run
+Status-> Green(Pass) & Red(Fail) 
+Latency-> A time to get first bite of the response
+
+View Results In Tree: 
+We have three divisions 
+1.Sample Result : Which shows Response Code & Response Message
+2.Request
+3.Response Data
+
+
+Note: To increase the users count in Thread group
+1,No of Threads(Users)  = 10
+2.Ramp up Period(sec) : 20 (Every 2 sec 1 user will be hitting the webpage)
+3.Loop Count : 
+If Forever :This will keep running forever until I stop forcefully/
+I can give the loop count
+
+To Erace the older results click on Clear All button on top
+
+If start the test it will keep on running until I forcefully stop , to stop I can use stop button /shut down button
+
+What is the difference between them —>
+1.Stop Button: It will forcefully stop the all the  execution
+2.Shut Down Button: It will cleanly stop the currently running thread and when all the threads are stooped then only it will stop the test
+
+*************************************************************************************************************
+
+C: Assertions : To check the Response
+
+Right click on Thread Group -> Add->  Assertions
+
+1.Common assertion : Response Assertion:
+
+We check with various things like (Response filed to Test) Radio Button
+1.1: Response Code:  
+
+Expecting response will be given by (Pattern Matching Rules) Radio Button
+1.1 Equals
+
+ Write the code in the Pattern to Test
+ 
+—> To Get the better view of the assertions we can add a listener called “Assertion Results”
+
+2. Duration Assertion:
+We are checking the duration of the response
+Duration to Assert:
+Duration in milliseconds: 
+Any Response which are beyond the given time Will be failed
+
+3.Size Assertion:
+It checks the size of the response in bytes with multiple comparison operators
+
+4.HTML Assertion:
+We are going to check the format of response , it will check valid html or not
+-> We can set the Error threshold and warning threshold it will not fail
+
+Note: But where exactly the error(what node is missing), we have to write  and say Errors only check box and now if I run this 
+
+This is a very good assertion to validate HTML , mainly in partnering with third part app
+
+Similarly we can check with XML and XHTML
+
+5. XML Assertion:
+It checks the XML format
+
+6. XPath Assertion:
+It will be mostly used in API testing, we want assert some nodes
+
+Note: The two listeners will take more time if it comes to load test, in that case just disable this listeners (View Results in Table & View Results In Tree )
+
+*************************************************************************************************************
+
+D.More about Listners:
+-> Are the  elements of Jmeter that gather information about the test which is executed
+-> Used to view Results / metrics of the test
+
+Most Commonly used listeners:
+1.View results in table
+Columns:
+Sample: No.of Users
+Start Time: Start time of the user
+Thread Name: Iteration of the user 
+Label: HTTP Request name
+Sample Time: The rest time of that request in ms
+Status: Mostly it takes from assertion, if assertions Pass(Green) and Fail(Red)
+Default code: only 200 OK(Pass) for non assertion test
+Bytes: Size of the request in (bytes
+Latency: Time to first byte of response in (ms)
+Connect Time: Time took by request to connect to the server
+
+2.View Results in Tree : We get in Tree structure
+Columns:
+Sampler Result: We get res code, response message, Response Headers & some other info
+Request: We can the request that is processed to the server
+Response data: Source code of the page that processed
+ 
+Note: It takes lot of memory, so incase if we want to do load don’t use this listener
+
+3.Aggregate Report: 
+It accumulates all the metrics and gives us a single line report
+
+Columns:
+Label: 
+Samples:
+Avg: Avg time of the request took
+Median: Half of the request took more than this and half took less than this (ms)
+90% Line:  90% of the requests took are in this range of time (ms)
+95% Line: 95% of the requests took are in this range of time (ms)
+99% Line: 99% of the requests took are in this range of time (ms) will be equivalent to max
+Min:  Min time took for a request
+Max: Max time took for a request
+Error %: It shows the error %
+ThroughPut: No.of requests for a sec
+KB/sec: Size per sec of the response
+
+
+4.Graph Results:
+———> Increase the users and loop forever
+It will have “Graph to Display”
+->> Data, Average, Median, Deviation, Throughput
+
+—>We will only check with Throughput & Average
+When our test start the Throughput is high and Avg is low but as out test progresses u will see the both lines going each other and crosses each other and this is bcz as we hit the same request again and again the Throughput goes high and Avg comes down
+
+Note: It takes lot of memory, so incase if we want to do load don’t use this listener
+
+5.Summary Report:
+It is very much common to  Aggregate Report
+We will not get 90%, 95% and 99% Lines
+We will get:
+Std Deviaton:  
+Avg Bytes: 
+
+Imp Note: Every listener will have FileName to export the results to Excel/CSV at run time by browsing the file from system
+
+6.Simple Data Writer:
+Select the file browsing and we can configure the column of the test execution metrics
+
+Note: We use only Simple Data Writer when we do heavy load so that memory is not consumed presenting  data the listener
+
+*************************************************************************************************************
+
+E. Record UI Test:
+-> Use Workbench for recording if not there —> Right click on Thread Group -> Add-> Non-Test Elements-> HTTP(S) Test Script Recorder
+
+Imp Note: But normally we don’t use it, we have some tools to record UI for Jmeter
+
+1. BadBay Software: On windows
+2. BlazeMeter - Chrome Plugin : On windows & Mac
+(https://chrome.google.com/webstore/search/blazemeter?hl=en-US)
+
+3.Sinup for that extension to record
+4.Start recording the test
+5.Export to Jmeter with .Jmx extension
+6.Open that file from Jmeter
+7.Add Listners
+8.Run and Validate
+
+*************************************************************************************************************
+
+F. Create a Database Test plan:
+Steps:
+
+**** Imp Note: Add mysql jdbc jar to lib folder of meter | Restart Jmeter ****
+1.Add Thread Group
+2.Add JDBC connection config —> Right click on Group-> Config Elements-> JDBC connection config | and Provide the details of our DB
+I.Give the Database URL
+II.JDBC Driver class
+iii.Username & Password
+3. Add JDBC Request —> Right click on Group->  Sampler-> JDBC request
+>>> Where we put the sql query
+5. Add listeners
+6.Run and Validate
+
+
+*************************************************************************************************************
+
+G. Running Jmeter from Command line:
+
+Uses: 1. GUI consumes more memory or resources
+2.Not recommended for heavy load testing
+3.Can be integrated with systems like (Jenkins/CI)
+
+Steps:
+1.Go to command line
+2.Go Jmeter bin folder
+3.command jmeter -n -t [location of jmter test script] -l [location of the result file] 
+Note: Prefix will sh jmeter on Mac and jmeter on windows
+
+-n: non gui
+-t: Location of meter scripts 
+-l: Location of result file
+
+rs-MAC15:bin saikiran$ sh jmeter -n -t /Users/saikiran/Desktop/Jmeter/apache-jmeter-4.0/Examples/MYfirstUITest2.jmx -l /Users/saikiran/Desktop/test.csv
+
+More: sh jmeter -? It shows all query commands
+
+*************************************************************************************************************
+
+H. How to Test FTP Upload and Download
+
+1.Right click on Group->  Sampler-> FTP request
+2.Add FTP connection parameters
+3.Test FTP Get and Validate
+
+4.Test a FTP Post and validate
+5.Select Local File Contents : Put(STOR)
+Note: 
+Use Binary file:
+If is not checked it uses SKY mode for: txt files
+If checked it is for: Zip files, Images
+  
+Save File in Response:
+If checked it takes some memory its good to not checking
+
+Note: If testing  on same server use config Elements -> FTP Request Defaults
+
+*************************************************************************************************************
+
+I. Testing web services (API)
+
+API= Application Programming Interface
+EX: Restaurant: Table <—— Wiaiter —> Kitchen
+Makemytrip
+Webservices : client <— API —> server
+
+Rest | SOUP
+
+How to test Rest API :
+Steps:
+1.Add HTTP request sampler
+OR
+Add SOAP/XML- RPC request sampler
+2.Add Rest API details
+URL, Path and Parameters if any with Method type
+3.Run and Validate
+
+How to test SOAP API :
+1.Add SOAP/XML- RPC request sampler
+2.Add API details
+Directly give that entire URL
+3.Run and Validate
+
+*************************************************************************************************************
+J. Assertion for JDBC Test:
+
+Steps:
+1.Add a JDBC request
+2.Add variable names in JDBC request like A,B,C,..
+3.Add Jmeter variable and Parameter to Test in Response Assertion
+Like : Jamter variable = C_2 (Column 3 and Row 2 data)
+	Parameter To Test = Value from Database
+4.Add Assertion Results listener to view results
+5.Run and Validate
+
+*************************************************************************************************************
+
+K. How to Generate Dashboard Reports:
+https://jmeter.apache.org/usermanual/generating-dashboard.html
+
+1.Create a Test plan and save with “n number of users”
+2.Try to rn the script from Command line (check “G”)
+3. Run a command line
+
+Option1:  Create a report at the end of the test
+sh jmeter -n -t “location of jmeter script” -l “location of result file”  -e -o “location of output folder”
+
+-e: Generating Dashboard Reports
+-o: Location of Output folder
+
+Example: sh jmeter -n -t /Users/saikiran/Desktop/Jmeter/apache-jmeter-4.0/Examples/ReportsGenerating.jmx -l /Users/saikiran/Desktop/Jmeter/apache-jmeter-4.0/TestResults/test1.csv  -e -o /Users/saikiran/Desktop/Jmeter/apache-jmeter-4.0/HTMLReports/ 
+
+
+Option2:  Create a report from csv file
+sh jmeter -g “location of csv file” -o “location of output folder”
+
+4.Analyze HTML reports
+Note: Response Time distribution in charts are imp to conclude the test
+
+*************************************************************************************************************
+
+
+
+
+
+
